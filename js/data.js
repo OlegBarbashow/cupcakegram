@@ -54,6 +54,8 @@ const createPhotoData = () => {
   }
 }
 
-let similarPhotos = new Array(SIMILAR_PHOTO_COUNT).fill(null).map(() => createPhotoData());
+const creatingArrayPhotos = () => {
+  return new Array(SIMILAR_PHOTO_COUNT).fill(null).map(() => createPhotoData());
+}
 
-console.log(similarPhotos);
+export {creatingArrayPhotos};
