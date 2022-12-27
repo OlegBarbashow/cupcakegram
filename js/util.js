@@ -39,4 +39,14 @@ const getRandomArrayValues = (array, from, to) => {
   return string;
 };
 
-export {getRandomNumber, getRandomArrayValue, getRandomArrayValues, makeUniqueRandomIntegerGenerator};
+const isEscape = (evt) => {
+  return evt.key === ('Escape' || 'Esc');
+}
+
+const isEnter = (evt) => {
+  return evt.key === 'Enter';
+}
+
+
+
+export {getRandomNumber, getRandomArrayValue, getRandomArrayValues, makeUniqueRandomIntegerGenerator, isEscape, isEnter};
