@@ -1,5 +1,7 @@
 import calcScroll from './calcScroll.js';
 import {isEscape, isEnter} from './util.js';
+import {clearInputs} from './form.js';
+
 const modal = (triggersSelector, modalSelector, closeSelector) => {
   const triggers = document.querySelectorAll(triggersSelector);
   const modal = document.querySelector(modalSelector);
@@ -29,19 +31,26 @@ const modal = (triggersSelector, modalSelector, closeSelector) => {
     document.body.style.marginRight = '0px';
 
     document.removeEventListener('keydown', onPopupEscapePress);
+    clearInputs();
   }
 
   triggers.forEach((trigger) =>{
 
-    trigger.addEventListener('keydown', (evt) => {
-      if (isEnter(evt)) {
+    if (trigger.type === 'file') {
+      trigger.addEventListener('change', (evt) => {
         openModal(evt);
-      }
-    });
+      });
+    } else {
+      trigger.addEventListener('keydown', (evt) => {
+        if (isEnter(evt)) {
+          openModal(evt);
+        }
+      });
 
-    trigger.addEventListener('click', (evt) => {
-      openModal(evt);
-    });
+      trigger.addEventListener('click', (evt) => {
+        openModal(evt);
+      });
+    }
   });
 
   close.addEventListener('click', () => {
