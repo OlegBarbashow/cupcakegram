@@ -6,7 +6,10 @@ const form = () => {
     sizeField = document.querySelector('.scale__control--value'),
     imageUploadPreview = document.querySelector('.img-upload__preview img'),
     hashtagsInput = document.querySelector('.text__hashtags'),
-    imageDescriptionInput = document.querySelector('.text__description');
+    imageDescriptionInput = document.querySelector('.text__description'),
+    effectsRadios = document.querySelectorAll('.effects__radio'),
+    slideElement = document.querySelector('.effect-level__slider'),
+    valueElement = document.querySelector('.effect-level__value');
 
   const editImageScale = () => {
     smallerButton.addEventListener('click', () => {
@@ -25,7 +28,7 @@ const form = () => {
   }
 
 
-  const imageInfoValidation = () => {
+  const hashTagsValidation = () => {
     let hashTagsErrors = ['','','','',''];
     hashtagsInput.addEventListener('input', () => {
       if (hashtagsInput.value) {
@@ -85,8 +88,6 @@ const form = () => {
                 'один и тот же хэш-тег не может быть использован дважды;';
             }
           } else {
-            // console.log(hashTagsErrors);
-            // console.log(hashTags);
             hashTagsErrors[index] = hashTagsErrors[index].replace('нельзя указать больше пяти хэш-тегов;', '');
             hashTagsErrors[index] = hashTagsErrors[index].replace('хэш-тег начинается с символа # (решётка);', '');
             hashTagsErrors[index] = hashTagsErrors[index].replace('хеш-тег не может состоять только из одной решётки;', '');
@@ -116,7 +117,6 @@ const form = () => {
           hashtagsInput.setCustomValidity('');
         }
         hashtagsInput.reportValidity();
-
       }
     });
 
@@ -134,8 +134,145 @@ const form = () => {
     });
   }
 
+  const overlayEffect = () => {
+    imageUploadPreview.classList.add('effects__preview--none');
+
+    noUiSlider.create(slideElement, {
+      range: {
+        min: 0,
+        max: 100,
+      },
+      start: 80,
+      step: 1,
+      connect: 'lower',
+      format: {
+        to: function (value) {
+          if (Number.isInteger(value)) {
+            return value.toFixed(0);
+          }
+          return value.toFixed(1);
+        },
+        from: function (value) {
+          return parseFloat(value);
+        },
+      },
+    });
+
+    slideElement.noUiSlider.on('update', (values, handle) => {
+      valueElement.value = values[handle];
+    });
+
+    slideElement.style.display = 'none';
+
+    for (let index = 0; index < effectsRadios.length; index++) {
+      effectsRadios[index].addEventListener('change', (evt) => {
+        if (evt.target.id !== 'effect-none') {
+          slideElement.style.display = 'block';
+        } else {
+          slideElement.style.display = 'none';
+        }
+
+        switch (evt.target.id) {
+          case 'effect-none':
+            imageUploadPreview.classList.add('effects__preview--none');
+            imageUploadPreview.style = 'filter: none';
+            slideElement.noUiSlider.off('update');
+            break;
+          case 'effect-chrome':
+            imageUploadPreview.classList.add('effects__preview--chrome');
+
+            slideElement.noUiSlider.updateOptions({
+              range: {
+                min: 0,
+                max: 1,
+              },
+              start: 1,
+              step: 0.1,
+            });
+
+            slideElement.noUiSlider.on('update', (values, handle) => {
+              imageUploadPreview.style = 'filter: grayscale(' + values[handle] + ')';
+            });
+
+            break;
+          case 'effect-sepia':
+            imageUploadPreview.classList.add('effects__preview--sepia');
+
+            slideElement.noUiSlider.updateOptions({
+              range: {
+                min: 0,
+                max: 1,
+              },
+              start: 1,
+              step: 0.1,
+            });
+
+            slideElement.noUiSlider.on('update', (values, handle) => {
+              imageUploadPreview.style = 'filter: sepia(' + values[handle] + ')';
+            });
+
+            break;
+          case 'effect-marvin':
+            imageUploadPreview.classList.add('effects__preview--marvin');
+
+            slideElement.noUiSlider.updateOptions({
+              range: {
+                min: 0,
+                max: 100,
+              },
+              start: 100,
+              step: 1,
+            });
+
+            slideElement.noUiSlider.on('update', (values, handle) => {
+              imageUploadPreview.style = 'filter: invert(' + values[handle] + '%)';
+            });
+
+            break;
+          case 'effect-phobos':
+            imageUploadPreview.classList.add('effects__preview--phobos');
+
+            slideElement.noUiSlider.updateOptions({
+              range: {
+                min: 0,
+                max: 3,
+              },
+              start: 3,
+              step: 0.1,
+            });
+
+            slideElement.noUiSlider.on('update', (values, handle) => {
+              imageUploadPreview.style = 'filter: blur(' + values[handle] + 'px)';
+            });
+
+            break;
+          case 'effect-heat':
+            imageUploadPreview.classList.add('effects__preview--heat');
+
+            slideElement.noUiSlider.updateOptions({
+              range: {
+                min: 1,
+                max: 3,
+              },
+              start: 3,
+              step: 0.1,
+            });
+
+            slideElement.noUiSlider.on('update', (values, handle) => {
+              imageUploadPreview.style = 'filter: brightness(' + values[handle] + ')';
+            });
+
+            break;
+          default :
+            imageUploadPreview.classList.add('effects__preview--none');
+        }
+      });
+    }
+  }
+
   editImageScale();
-  imageInfoValidation();
+  overlayEffect();
+  hashTagsValidation();
 }
 
 const clearInputs = () => {
