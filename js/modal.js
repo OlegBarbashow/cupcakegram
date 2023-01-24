@@ -63,7 +63,7 @@ const modal = (triggersSelector, modalSelector, closeSelector) => {
     }
   });
 
-  modal.addEventListener('click', (evt) => {
+  modal.addEventListener('mousedown', (evt) => {
     if (evt.target === modal) {
       closeModal();
     }

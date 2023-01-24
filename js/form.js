@@ -134,6 +134,26 @@ const form = () => {
     });
   }
 
+  const imageCommentValidation = () => {
+    const lengthRule = /.{140}/gui;
+
+    imageDescriptionInput.addEventListener('input', (evt) => {
+      let descriptionValue = evt.target.value;
+      if (descriptionValue.match(lengthRule)) {
+        imageDescriptionInput.setCustomValidity('длина комментария не может составлять больше 140 символов;');
+      } else {
+        imageDescriptionInput.setCustomValidity('')
+      }
+      imageDescriptionInput.reportValidity();
+    });
+
+    imageDescriptionInput.addEventListener('keydown', (evt) => {
+      if (isEscape(evt)) {
+        evt.stopPropagation();
+      }
+    });
+  }
+
   const overlayEffect = () => {
     imageUploadPreview.classList.add('effects__preview--none');
 
@@ -273,6 +293,7 @@ const form = () => {
   editImageScale();
   overlayEffect();
   hashTagsValidation();
+  imageCommentValidation();
 }
 
 const clearInputs = () => {
