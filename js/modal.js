@@ -2,20 +2,32 @@ import calcScroll from './calcScroll.js';
 import {isEscape, isEnter} from './util.js';
 import {clearInputs} from './form.js';
 
+const onPopupEscapePress = (evt) => {
+  if (isEscape(evt)) {
+    evt.preventDefault();
+    modal.classList.add('hidden');
+    document.body.classList.remove('modal-open');
+    document.body.style.marginRight = '0px';
+  }
+}
+
+const closeModal = (modalSelector) => {
+  const modal = document.querySelector(modalSelector);
+  modal.classList.add('hidden');
+  document.body.classList.remove('modal-open');
+  document.body.style.marginRight = '0px';
+
+  document.removeEventListener('keydown', onPopupEscapePress);
+  clearInputs();
+}
+
 const modal = (triggersSelector, modalSelector, closeSelector) => {
   const triggers = document.querySelectorAll(triggersSelector);
   const modal = document.querySelector(modalSelector);
   const close = document.querySelector(closeSelector);
   const scroll = calcScroll();
 
-  const onPopupEscapePress = (evt) => {
-    if (isEscape(evt)) {
-      evt.preventDefault();
-      modal.classList.add('hidden');
-      document.body.classList.remove('modal-open');
-      document.body.style.marginRight = '0px';
-    }
-  }
+
   const openModal = (evt) => {
     evt.preventDefault();
     modal.classList.remove('hidden');
@@ -23,15 +35,6 @@ const modal = (triggersSelector, modalSelector, closeSelector) => {
     document.body.style.marginRight = `${scroll}px`;
 
     document.addEventListener('keydown', onPopupEscapePress);
-  }
-
-  const closeModal = () => {
-    modal.classList.add('hidden');
-    document.body.classList.remove('modal-open');
-    document.body.style.marginRight = '0px';
-
-    document.removeEventListener('keydown', onPopupEscapePress);
-    clearInputs();
   }
 
   triggers.forEach((trigger) =>{
@@ -54,21 +57,21 @@ const modal = (triggersSelector, modalSelector, closeSelector) => {
   });
 
   close.addEventListener('click', () => {
-    closeModal();
+    closeModal(modalSelector);
   });
 
   close.addEventListener('keydown', (evt) => {
     if (isEnter(evt)) {
-      closeModal();
+      closeModal(modalSelector);
     }
   });
 
   modal.addEventListener('mousedown', (evt) => {
     if (evt.target === modal) {
-      closeModal();
+      closeModal(modalSelector);
     }
   });
 
 };
 
-export default modal;
+export {modal, closeModal};

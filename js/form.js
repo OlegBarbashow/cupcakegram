@@ -1,4 +1,7 @@
 import {isEscape} from './util.js';
+import {setData} from './api.js';
+import {showAlert} from './util.js';
+import {closeModal} from './modal.js'
 
 const form = () => {
   const smallerButton = document.querySelector('.scale__control--smaller'),
@@ -9,7 +12,9 @@ const form = () => {
     imageDescriptionInput = document.querySelector('.text__description'),
     effectsRadios = document.querySelectorAll('.effects__radio'),
     slideElement = document.querySelector('.effect-level__slider'),
-    valueElement = document.querySelector('.effect-level__value');
+    valueElement = document.querySelector('.effect-level__value'),
+    imgUploadForm = document.querySelector('.img-upload__form');
+
 
   const editImageScale = () => {
     smallerButton.addEventListener('click', () => {
@@ -294,13 +299,30 @@ const form = () => {
   overlayEffect();
   hashTagsValidation();
   imageCommentValidation();
+
+  imgUploadForm.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+
+    const formData = new FormData(imgUploadForm);
+
+    setData(() => {
+      closeModal('.img-upload__overlay');
+    }, showAlert, formData);
+
+
+  });
 }
 
 const clearInputs = () => {
-  const inputs = document.querySelectorAll('#upload-file'),
+  const inputs = document.querySelectorAll('.text__hashtags'),
+    uploads = document.querySelectorAll('#upload-file'),
     textarea = document.querySelectorAll('textarea');
 
   inputs.forEach(item => {
+    item.value = '';
+  });
+
+  uploads.forEach(item => {
     item.value = '';
   });
 

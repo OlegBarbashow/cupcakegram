@@ -1,7 +1,7 @@
 /* Общие стили. Каркас
    ========================================================================== */
 
-import 
+import
 
 @font-face {
   font-family: "Open Sans";
@@ -453,7 +453,7 @@ main {
 }
 
 .scale__control--smaller::before {
-  content: "–";
+  content: "-";
   position: absolute;
   top: 50%;
   left: 50%;
