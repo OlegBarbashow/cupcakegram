@@ -4,9 +4,11 @@ import bigPicture from'./big-picture.js';
 import {form} from './form.js';
 import {getData} from './api.js';
 import {showAlert} from './util.js';
+import {filter} from './filter.js';
 
 getData((photoArray) => {
   thumbnail(photoArray);
+  filter(() => thumbnail(photoArray));
   bigPicture('.picture>.picture__img', photoArray);
   modal('.pictures>.picture', '.big-picture', '.big-picture__cancel');
 }, (message) => showAlert(message));

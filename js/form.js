@@ -15,7 +15,6 @@ const form = () => {
     valueElement = document.querySelector('.effect-level__value'),
     imgUploadForm = document.querySelector('.img-upload__form');
 
-
   const editImageScale = () => {
     smallerButton.addEventListener('click', () => {
       if (parseInt(sizeField.value) !== 25) {
@@ -299,6 +298,8 @@ const form = () => {
   overlayEffect();
   hashTagsValidation();
   imageCommentValidation();
+
+
 
   imgUploadForm.addEventListener('submit', (evt) => {
     evt.preventDefault();
